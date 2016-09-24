@@ -1,0 +1,6 @@
+rm -f *.o sg *.s
+gcc -c -Wall -march=armv7-a -mfpu=neon -mfloat-abi=hard -mcpu=cortex-a8 -mtune=cortex-a8 -ftree-vectorize -ffast-math -fsingle-precision-constant -O3   -c -o main.o main.c
+gcc -c -Wall -march=armv7-a -mfpu=neon -mfloat-abi=hard -mcpu=cortex-a8 -mtune=cortex-a8 -ftree-vectorize -ffast-math -fsingle-precision-constant -O3   -c -o geometry.o geometry.c
+gcc -c -Wall -march=armv7-a -mfpu=neon -mfloat-abi=hard -mcpu=cortex-a8 -mtune=cortex-a8 -ftree-vectorize -ffast-math -fsingle-precision-constant -O3   -c -o CMAN_coords.o CMAN_coords.c
+gcc main.o geometry.o CMAN_coords.o -lrt -lm -o sg
+gcc -Wa,-adhln -g geometry.c -c > geometry_list.s
