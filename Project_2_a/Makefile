@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -Wall -Wextra
+#CFLAGS = -Wall -Wextra -lrt #-march=armv7-a -mfloat-abi=hard -mcpu=cortex-a8 -mtune=cortex-a8
 
 SOURCES=$(wildcard ./*.c)
 OBJECTS=$(subst src,obj,$(SOURCES:.c=.o))
