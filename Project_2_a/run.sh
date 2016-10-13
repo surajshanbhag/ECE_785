@@ -1,9 +1,9 @@
 #!/bin/bash
-NumTest=50
+NumTest=1
 min1=999999
 min2=999999
 
-FLAGS=("-Wall -Wextra -lrt" "-march=armv7-a" "-mfloat-abi=hard" "-mcpu=cortex-a8 -mtune=cortex-a8" "-ftree-vectorize" "-ffast-math" "-fsingle-precision-constant" "-fmodulo-sched" "-fmodulo-sched-allow-regmoves" "-fgcse-las" "-fgcse-after-reload" "-fwhole-program" "-funsafe-math-optimizations" "-freciprocal-math" "-O" "-O1" "-O2" "-O3" )
+FLAGS=("-Wall -Wextra -lrt" "-fforward-propagate" "-march=armv7-a" "-mfloat-abi=hard" "-mcpu=cortex-a8 -mtune=cortex-a8" "-ftree-vectorize" "-ffast-math" "-fsingle-precision-constant" "-fmodulo-sched" "-fmodulo-sched-allow-regmoves" "-fgcse-las" "-fgcse-after-reload" "-fwhole-program" "-funsafe-math-optimizations" "-freciprocal-math" "-O" "-O1" "-O2" "-O3" )
 flagn=0;
 minvalues1=()
 minvalues2=()
@@ -41,6 +41,7 @@ do
     #wc -c alpha.out
     minvalues1+=($min1)
     minvalues2+=($min2)
+    echo $min1 $min2
     # or do whatever with individual element of the array
 done
 
