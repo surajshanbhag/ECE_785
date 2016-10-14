@@ -8,6 +8,127 @@ int newImage[512 * 512];
 #define G(x) (((x) & 0x0000ff00) >> 8)
 #define B(x) ((x) & 0x000000ff)
 
+#if macro == 10
+void alphaBlend_c(unsigned char *__restrict fgImage,unsigned char *__restrict bgImage,unsigned char *__restrict dstImage)
+{
+    int index;
+    int a_fg,dst_r,dst_g,dst_b; 
+    int temp1,temp2;
+    printf("2");
+#pragma vector aligned
+    for(index = 0; index < 512*512; index++){
+        dstImage[index] =  0xff;
+        a_fg = fgImage[index];
+        temp1 = (fgImage[index+1] * a_fg);
+        temp2 = (bgImage[index+1] * (255-a_fg));
+        dst_r = ( temp1 + temp2 )>>8;
+        dstImage[index+1] =  (0x000000ff & dst_r);
+        temp1 = (fgImage[index+2] * a_fg);
+        temp2 = (bgImage[index+2] * (255-a_fg));
+        dst_g = ( temp1 + temp2 )>>8;
+        dstImage[index+2] =  (0x000000ff & dst_g);
+        temp1 = (fgImage[index+3] * a_fg);
+        temp2 = (bgImage[index+3] * (255-a_fg));
+        dst_b = ( temp1 + temp2 )>>8;
+        dstImage[index+3] =  (0x000000ff & dst_b);
+    }
+}
+#endif
+#if macro == 9
+void alphaBlend_c(unsigned char *__restrict fgImage,unsigned char *__restrict bgImage,unsigned char *__restrict dstImage)
+{
+    int index;
+    int a_fg,dst_r,dst_g,dst_b; 
+    int temp;
+    printf("2");
+#pragma vector aligned
+
+    for(index = 0; index < 512*512; index++){
+        a_fg = fgImage[index];
+        dst_r = ((fgImage[index+1] * a_fg) + (bgImage[index+1] * (255-a_fg)))>>8;
+        dst_g = ((fgImage[index+2] * a_fg) + (bgImage[index+2] * (255-a_fg)))>>8;
+        dst_b = ((fgImage[index+3] * a_fg) + (bgImage[index+3] * (255-a_fg)))>>8;
+        dstImage[index] =  0xff;
+        dstImage[index+1] =  (0x000000ff & dst_r);
+        dstImage[index+2] =  (0x000000ff & dst_g);
+        dstImage[index+3] =  (0x000000ff & dst_b);
+    }
+}
+#endif
+#if macro == 8
+void alphaBlend_c(int *__restrict fgImage, int *__restrict bgImage, int *__restrict dstImage)
+{
+    int index;
+    int a_fg,dst_r,dst_g,dst_b; 
+    printf("2");
+    for(index = 0; index < 512*512; index++){
+        a_fg = A(fgImage[index]);
+        dst_r = ((R(fgImage[index]) * a_fg) + (R(bgImage[index]) * (255-a_fg)))>>8;
+        dst_g = ((G(fgImage[index]) * a_fg) + (G(bgImage[index]) * (255-a_fg)))>>8;
+        dst_b = ((B(fgImage[index]) * a_fg) + (B(bgImage[index]) * (255-a_fg)))>>8;
+        dstImage[index] =  0xff000000 |
+            (0x00ff0000 & (dst_r << 16)) |
+            (0x0000ff00 & (dst_g << 8)) |
+            (0x000000ff & (dst_b));
+    }
+}
+
+#endif
+#if macro == 7
+void alphaBlend_c(void)
+{
+    int y;
+    short f_a[512*512];
+    short f_r[512*512];
+    short f_g[512*512];
+    short f_b[512*512];
+    short b_r[512*512];
+    short b_g[512*512];
+    short b_b[512*512];
+    for(y = 0; y < 512*512; y++){
+        f_a[y] = A(foreImage[y]);
+    }
+    for(y = 0; y < 512*512; y++){
+        f_r[y] = R(foreImage[y]);
+    }
+    for(y = 0; y < 512*512; y++){
+        f_g[y] = G(foreImage[y]);
+    }
+    for(y = 0; y < 512*512; y++){
+        f_b[y] = B(foreImage[y]);
+    }
+    for(y = 0; y < 512*512; y++){
+        b_r[y] = R(backImage[y]);
+        b_g[y] = G(backImage[y]);
+        b_b[y] = B(backImage[y]);
+    }
+    for(y = 0; y < 512*512; y++){
+        newImage[y] = 0xff000000;
+    }
+    for(y = 0; y < 512*512; y++){
+        newImage[y] |= ((f_a[y]*(f_r[y]-b_r[y])+b_r[y]*255)/256)>>16;
+        newImage[y] |= ((f_a[y]*(f_g[y]-b_g[y])+b_g[y]*255)/256)>>8;
+        newImage[y] |= ((f_a[y]*(f_b[y]-b_b[y])+b_b[y]*255)/256);
+    }
+/*
+    for(y = 0; y < 512*512; y++){
+        dst_r[y] = ((R(foreImage[y]) * a_fg[y]) + (R(backImage[y]) * (255-a_fg[y])))/256;
+    }
+    for(y = 0; y < 512*512; y++){
+        dst_g[y] = ((G(foreImage[y]) * a_fg[y]) + (R(backImage[y]) * (255-a_fg[y])))/256;
+    }
+    for(y = 0; y < 512*512; y++){
+        dst_b[y] = ((B(foreImage[y]) * a_fg[y]) + (R(backImage[y]) * (255-a_fg[y])))/256;
+    }
+    for(y = 0; y < 512*512; y++){
+        dstImage[y] =  0xff000000 |
+            (0x00ff0000 & (dst_r[y] << 16)) |
+            (0x0000ff00 & (dst_g[y] << 8)) |
+            (0x000000ff & (dst_b[y]));
+    }*/
+}
+#endif
+
 #if macro == 6
 void alphaBlend_c(void)
 {
@@ -194,6 +315,12 @@ int main(int argc, char**argv)
         alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
 #elif macro == 2
         alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
+#elif macro == 8
+        alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
+#elif macro == 9
+        alphaBlend_c((unsigned char*)&foreImage[0], (unsigned char*)&backImage[0], (unsigned char*)&newImage[0]);
+#elif macro == 10
+        alphaBlend_c((unsigned char*)&foreImage[0], (unsigned char*)&backImage[0], (unsigned char*)&newImage[0]);
 #elif macro >= 3
         alphaBlend_c();
 #endif
