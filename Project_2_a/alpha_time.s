@@ -45,343 +45,348 @@
   16:alpha_time.c  ****     int dst_r[4],dst_g[4],dst_b[4]; 
   17:alpha_time.c  ****     int r_fg[4],g_fg[4],b_fg[4]; 
   18:alpha_time.c  ****     int r_bg[4],g_bg[4],b_bg[4]; 
-  19:alpha_time.c  ****     int a_fg[4];
+  19:alpha_time.c  ****     int a_fg[4],a_fgM255[4];
   20:alpha_time.c  ****     int temp1,temp2;
   21:alpha_time.c  ****     printf("11");
   22:alpha_time.c  **** //#pragma vector aligned
-  23:alpha_time.c  ****     for(index = 0; index < 512*512/4; index=index+4){
-  24:alpha_time.c  ****         a_fg[0] = A(fgImage[index]);
-  25:alpha_time.c  ****         a_fg[1] = A(fgImage[index+1]);
-  26:alpha_time.c  ****         a_fg[2] = A(fgImage[index+2]);
-  27:alpha_time.c  ****         a_fg[3] = A(fgImage[index+3]);
+  23:alpha_time.c  ****     for(index = 0; index < 65536; index++){
+  24:alpha_time.c  ****         a_fg[0] = A(fgImage[4*index]);
+  25:alpha_time.c  ****         a_fg[1] = A(fgImage[4*index+1]);
+  26:alpha_time.c  ****         a_fg[2] = A(fgImage[4*index+2]);
+  27:alpha_time.c  ****         a_fg[3] = A(fgImage[4*index+3]);
   28:alpha_time.c  **** 
-  29:alpha_time.c  ****         r_fg[0] = R(fgImage[index]);
-  30:alpha_time.c  ****         r_fg[1] = R(fgImage[index+1]);
-  31:alpha_time.c  ****         r_fg[2] = R(fgImage[index+2]);
-  32:alpha_time.c  ****         r_fg[3] = R(fgImage[index+3]);
+  29:alpha_time.c  ****         a_fgM255[0] = 255-a_fg[0]; 
+  30:alpha_time.c  ****         a_fgM255[1] = 255-a_fg[1]; 
+  31:alpha_time.c  ****         a_fgM255[2] = 255-a_fg[2]; 
+  32:alpha_time.c  ****         a_fgM255[3] = 255-a_fg[3]; 
   33:alpha_time.c  **** 
-  34:alpha_time.c  ****         g_fg[0] = G(fgImage[index]);
-  35:alpha_time.c  ****         g_fg[1] = G(fgImage[index+1]);
-  36:alpha_time.c  ****         g_fg[2] = G(fgImage[index+2]);
-  37:alpha_time.c  ****         g_fg[3] = G(fgImage[index+3]);
+  34:alpha_time.c  ****         r_fg[0] = R(fgImage[4*index]);
+  35:alpha_time.c  ****         r_fg[1] = R(fgImage[4*index+1]);
+  36:alpha_time.c  ****         r_fg[2] = R(fgImage[4*index+2]);
+  37:alpha_time.c  ****         r_fg[3] = R(fgImage[4*index+3]);
   38:alpha_time.c  **** 
-  39:alpha_time.c  ****         b_fg[0] = B(fgImage[index]);
-  40:alpha_time.c  ****         b_fg[1] = B(fgImage[index+1]);
-  41:alpha_time.c  ****         b_fg[2] = B(fgImage[index+2]);
-  42:alpha_time.c  ****         b_fg[3] = B(fgImage[index+3]);
+  39:alpha_time.c  ****         g_fg[0] = G(fgImage[4*index]);
+  40:alpha_time.c  ****         g_fg[1] = G(fgImage[4*index+1]);
+  41:alpha_time.c  ****         g_fg[2] = G(fgImage[4*index+2]);
+  42:alpha_time.c  ****         g_fg[3] = G(fgImage[4*index+3]);
   43:alpha_time.c  **** 
-  44:alpha_time.c  ****         r_bg[0] = R(bgImage[index]);
-  45:alpha_time.c  ****         r_bg[1] = R(bgImage[index+1]);
-  46:alpha_time.c  ****         r_bg[2] = R(bgImage[index+2]);
-  47:alpha_time.c  ****         r_bg[3] = R(bgImage[index+3]);
+  44:alpha_time.c  ****         b_fg[0] = B(fgImage[4*index]);
+  45:alpha_time.c  ****         b_fg[1] = B(fgImage[4*index+1]);
+  46:alpha_time.c  ****         b_fg[2] = B(fgImage[4*index+2]);
+  47:alpha_time.c  ****         b_fg[3] = B(fgImage[4*index+3]);
   48:alpha_time.c  **** 
-  49:alpha_time.c  ****         g_bg[0] = G(bgImage[index]);
-  50:alpha_time.c  ****         g_bg[1] = G(bgImage[index+1]);
-  51:alpha_time.c  ****         g_bg[2] = G(bgImage[index+2]);
-  52:alpha_time.c  ****         g_bg[3] = G(bgImage[index+3]);
+  49:alpha_time.c  ****         r_bg[0] = R(bgImage[4*index]);
+  50:alpha_time.c  ****         r_bg[1] = R(bgImage[4*index+1]);
+  51:alpha_time.c  ****         r_bg[2] = R(bgImage[4*index+2]);
+  52:alpha_time.c  ****         r_bg[3] = R(bgImage[4*index+3]);
   53:alpha_time.c  **** 
-  54:alpha_time.c  ****         b_bg[0] = B(bgImage[index]);
-  55:alpha_time.c  ****         b_bg[1] = B(bgImage[index+1]);
-  56:alpha_time.c  ****         b_bg[2] = B(bgImage[index+2]);
-  57:alpha_time.c  ****         b_bg[3] = B(bgImage[index+3]);
+  54:alpha_time.c  ****         g_bg[0] = G(bgImage[4*index]);
+  55:alpha_time.c  ****         g_bg[1] = G(bgImage[4*index+1]);
+  56:alpha_time.c  ****         g_bg[2] = G(bgImage[4*index+2]);
+  57:alpha_time.c  ****         g_bg[3] = G(bgImage[4*index+3]);
   58:alpha_time.c  **** 
-  59:alpha_time.c  ****         dst_r[0] = ( (r_fg[0] * a_fg[0]) +(r_bg[0]*(255-a_fg[0])) )>>8;
-  60:alpha_time.c  ****         dst_r[1] = ( (r_fg[1] * a_fg[1]) +(r_bg[1]*(255-a_fg[1])) )>>8;
-  61:alpha_time.c  ****         dst_r[2] = ( (r_fg[2] * a_fg[2]) +(r_bg[2]*(255-a_fg[2])) )>>8;
-  62:alpha_time.c  ****         dst_r[3] = ( (r_fg[3] * a_fg[3]) +(r_bg[3]*(255-a_fg[3])) )>>8;
+  59:alpha_time.c  ****         b_bg[0] = B(bgImage[4*index]);
+  60:alpha_time.c  ****         b_bg[1] = B(bgImage[4*index+1]);
+  61:alpha_time.c  ****         b_bg[2] = B(bgImage[4*index+2]);
+  62:alpha_time.c  ****         b_bg[3] = B(bgImage[4*index+3]);
   63:alpha_time.c  **** 
-  64:alpha_time.c  ****         dst_g[0] = ( (g_fg[0] * a_fg[0]) +(g_bg[0]*(255-a_fg[0])) )>>8;
-  65:alpha_time.c  ****         dst_g[1] = ( (g_fg[1] * a_fg[1]) +(g_bg[1]*(255-a_fg[1])) )>>8;
-  66:alpha_time.c  ****         dst_g[2] = ( (g_fg[2] * a_fg[2]) +(g_bg[2]*(255-a_fg[2])) )>>8;
-  67:alpha_time.c  ****         dst_g[3] = ( (g_fg[3] * a_fg[3]) +(g_bg[3]*(255-a_fg[3])) )>>8;
+  64:alpha_time.c  ****         dst_r[0] = ( (r_fg[0] * a_fg[0]) +(r_bg[0]*a_fgM255[0]) )>>8;
+  65:alpha_time.c  ****         dst_r[1] = ( (r_fg[1] * a_fg[1]) +(r_bg[1]*a_fgM255[1]) )>>8;
+  66:alpha_time.c  ****         dst_r[2] = ( (r_fg[2] * a_fg[2]) +(r_bg[2]*a_fgM255[2]) )>>8;
+  67:alpha_time.c  ****         dst_r[3] = ( (r_fg[3] * a_fg[3]) +(r_bg[3]*a_fgM255[3]) )>>8;
   68:alpha_time.c  **** 
-  69:alpha_time.c  ****         dst_b[0] = ( (b_fg[0] * a_fg[0]) +(b_bg[0]*(255-a_fg[0])) )>>8;
-  70:alpha_time.c  ****         dst_b[1] = ( (b_fg[1] * a_fg[1]) +(b_bg[1]*(255-a_fg[1])) )>>8;
-  71:alpha_time.c  ****         dst_b[2] = ( (b_fg[2] * a_fg[2]) +(b_bg[2]*(255-a_fg[2])) )>>8;
-  72:alpha_time.c  ****         dst_b[3] = ( (b_fg[3] * a_fg[3]) +(b_bg[3]*(255-a_fg[3])) )>>8;
+  69:alpha_time.c  ****         dst_g[0] = ( (g_fg[0] * a_fg[0]) +(g_bg[0]*(255-a_fgM255[0])) )>>8;
+  70:alpha_time.c  ****         dst_g[1] = ( (g_fg[1] * a_fg[1]) +(g_bg[1]*(255-a_fgM255[1])) )>>8;
+  71:alpha_time.c  ****         dst_g[2] = ( (g_fg[2] * a_fg[2]) +(g_bg[2]*(255-a_fgM255[2])) )>>8;
+  72:alpha_time.c  ****         dst_g[3] = ( (g_fg[3] * a_fg[3]) +(g_bg[3]*(255-a_fgM255[3])) )>>8;
   73:alpha_time.c  **** 
-  74:alpha_time.c  ****         dstImage[index] =  0xff;
-  75:alpha_time.c  ****         dstImage[index+1] =  0xff;
-  76:alpha_time.c  ****         dstImage[index+2] =  0xff;
-  77:alpha_time.c  ****         dstImage[index+3] =  0xff;
+  74:alpha_time.c  ****         dst_b[0] = ( (b_fg[0] * a_fg[0]) +(b_bg[0]*a_fgM255[0]) )>>8;
+  75:alpha_time.c  ****         dst_b[1] = ( (b_fg[1] * a_fg[1]) +(b_bg[1]*a_fgM255[1]) )>>8;
+  76:alpha_time.c  ****         dst_b[2] = ( (b_fg[2] * a_fg[2]) +(b_bg[2]*a_fgM255[2]) )>>8;
+  77:alpha_time.c  ****         dst_b[3] = ( (b_fg[3] * a_fg[3]) +(b_bg[3]*a_fgM255[3]) )>>8;
   78:alpha_time.c  **** 
-  79:alpha_time.c  ****         dstImage[index] =  (0x000000ff & dst_b[0]);
-  80:alpha_time.c  ****         dstImage[index+1] =  (0x000000ff & dst_b[1]);
-  81:alpha_time.c  ****         dstImage[index+2] = (0x000000ff & dst_b[2]);
-  82:alpha_time.c  ****         dstImage[index+3] =  (0x000000ff & dst_b[3]);
+  79:alpha_time.c  ****         dstImage[4*index] =  0xff000000;
+  80:alpha_time.c  ****         dstImage[4*index+1] =  0xff000000;
+  81:alpha_time.c  ****         dstImage[4*index+2] =  0xff000000;
+  82:alpha_time.c  ****         dstImage[4*index+3] =  0xff000000;
   83:alpha_time.c  **** 
-  84:alpha_time.c  ****         dstImage[index] =  (0x0000ff00 & (dst_g[0]<<8) );
-  85:alpha_time.c  ****         dstImage[index+1] =  (0x0000ff00 & (dst_g[1]<<8) );
-  86:alpha_time.c  ****         dstImage[index+2] = (0x0000ff00 & (dst_g[2]<<8) );
-  87:alpha_time.c  ****         dstImage[index+3] =  (0x0000ff00 & (dst_g[3]<<8) );
+  84:alpha_time.c  ****         dstImage[4*index] |=  (0x000000ff & dst_b[0]);
+  85:alpha_time.c  ****         dstImage[4*index+1] |=  (0x000000ff & dst_b[1]);
+  86:alpha_time.c  ****         dstImage[4*index+2] |= (0x000000ff & dst_b[2]);
+  87:alpha_time.c  ****         dstImage[4*index+3] |=  (0x000000ff & dst_b[3]);
   88:alpha_time.c  **** 
-  89:alpha_time.c  ****         dstImage[index] =  (0x00ff0000 & (dst_r[0]<<16) );
-  90:alpha_time.c  ****         dstImage[index+1] =  (0x00ff0000 & (dst_r[1]<<16) );
-  91:alpha_time.c  ****         dstImage[index+2] = (0x00ff0000 & (dst_r[2]<<16) );
-  92:alpha_time.c  ****         dstImage[index+3] =  (0x00ff0000 & (dst_r[3]<<16) );
-  93:alpha_time.c  ****     }
-  94:alpha_time.c  **** }
-  95:alpha_time.c  **** #endif
-  96:alpha_time.c  **** #if macro == 10
-  97:alpha_time.c  **** void alphaBlend_c(unsigned char *__restrict fgImage,unsigned char *__restrict bgImage,unsigned char
-  98:alpha_time.c  **** {
-  99:alpha_time.c  ****     int index;
- 100:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
- 101:alpha_time.c  ****     int temp1,temp2;
- 102:alpha_time.c  ****     printf("2");
- 103:alpha_time.c  **** #pragma vector aligned
- 104:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
- 105:alpha_time.c  ****         dstImage[index] =  0xff;
- 106:alpha_time.c  ****         a_fg = fgImage[index];
- 107:alpha_time.c  ****         temp1 = (fgImage[index+1] * a_fg);
- 108:alpha_time.c  ****         temp2 = (bgImage[index+1] * (255-a_fg));
- 109:alpha_time.c  ****         dst_r = ( temp1 + temp2 )>>8;
- 110:alpha_time.c  ****         dstImage[index+1] =  (0x000000ff & dst_r);
- 111:alpha_time.c  ****         temp1 = (fgImage[index+2] * a_fg);
- 112:alpha_time.c  ****         temp2 = (bgImage[index+2] * (255-a_fg));
- 113:alpha_time.c  ****         dst_g = ( temp1 + temp2 )>>8;
- 114:alpha_time.c  ****         dstImage[index+2] =  (0x000000ff & dst_g);
- 115:alpha_time.c  ****         temp1 = (fgImage[index+3] * a_fg);
- 116:alpha_time.c  ****         temp2 = (bgImage[index+3] * (255-a_fg));
- 117:alpha_time.c  ****         dst_b = ( temp1 + temp2 )>>8;
- 118:alpha_time.c  ****         dstImage[index+3] =  (0x000000ff & dst_b);
- 119:alpha_time.c  ****     }
- 120:alpha_time.c  **** }
- 121:alpha_time.c  **** #endif
- 122:alpha_time.c  **** #if macro == 9
- 123:alpha_time.c  **** void alphaBlend_c(unsigned char *__restrict fgImage,unsigned char *__restrict bgImage,unsigned char
- 124:alpha_time.c  **** {
- 125:alpha_time.c  ****     int index;
- 126:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
- 127:alpha_time.c  ****     int temp;
- 128:alpha_time.c  ****     printf("2");
- 129:alpha_time.c  **** #pragma vector aligned
- 130:alpha_time.c  **** 
- 131:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
- 132:alpha_time.c  ****         a_fg = fgImage[index];
- 133:alpha_time.c  ****         dst_r = ((fgImage[index+1] * a_fg) + (bgImage[index+1] * (255-a_fg)))>>8;
- 134:alpha_time.c  ****         dst_g = ((fgImage[index+2] * a_fg) + (bgImage[index+2] * (255-a_fg)))>>8;
- 135:alpha_time.c  ****         dst_b = ((fgImage[index+3] * a_fg) + (bgImage[index+3] * (255-a_fg)))>>8;
- 136:alpha_time.c  ****         dstImage[index] =  0xff;
- 137:alpha_time.c  ****         dstImage[index+1] =  (0x000000ff & dst_r);
- 138:alpha_time.c  ****         dstImage[index+2] =  (0x000000ff & dst_g);
- 139:alpha_time.c  ****         dstImage[index+3] =  (0x000000ff & dst_b);
- 140:alpha_time.c  ****     }
- 141:alpha_time.c  **** }
- 142:alpha_time.c  **** #endif
- 143:alpha_time.c  **** #if macro == 8
- 144:alpha_time.c  **** void alphaBlend_c(int *__restrict fgImage, int *__restrict bgImage, int *__restrict dstImage)
- 145:alpha_time.c  **** {
- 146:alpha_time.c  ****     int index;
- 147:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
- 148:alpha_time.c  ****     printf("2");
- 149:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
- 150:alpha_time.c  ****         a_fg = A(fgImage[index]);
- 151:alpha_time.c  ****         dst_r = ((R(fgImage[index]) * a_fg) + (R(bgImage[index]) * (255-a_fg)))>>8;
- 152:alpha_time.c  ****         dst_g = ((G(fgImage[index]) * a_fg) + (G(bgImage[index]) * (255-a_fg)))>>8;
- 153:alpha_time.c  ****         dst_b = ((B(fgImage[index]) * a_fg) + (B(bgImage[index]) * (255-a_fg)))>>8;
- 154:alpha_time.c  ****         dstImage[index] =  0xff000000 |
- 155:alpha_time.c  ****             (0x00ff0000 & (dst_r << 16)) |
- 156:alpha_time.c  ****             (0x0000ff00 & (dst_g << 8)) |
- 157:alpha_time.c  ****             (0x000000ff & (dst_b));
- 158:alpha_time.c  ****     }
- 159:alpha_time.c  **** }
- 160:alpha_time.c  **** 
- 161:alpha_time.c  **** #endif
- 162:alpha_time.c  **** #if macro == 7
- 163:alpha_time.c  **** void alphaBlend_c(void)
- 164:alpha_time.c  **** {
- 165:alpha_time.c  ****     int y;
- 166:alpha_time.c  ****     short f_a[512*512];
- 167:alpha_time.c  ****     short f_r[512*512];
- 168:alpha_time.c  ****     short f_g[512*512];
- 169:alpha_time.c  ****     short f_b[512*512];
- 170:alpha_time.c  ****     short b_r[512*512];
- 171:alpha_time.c  ****     short b_g[512*512];
- 172:alpha_time.c  ****     short b_b[512*512];
- 173:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
- 174:alpha_time.c  ****         f_a[y] = A(foreImage[y]);
- 175:alpha_time.c  ****     }
- 176:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
- 177:alpha_time.c  ****         f_r[y] = R(foreImage[y]);
- 178:alpha_time.c  ****     }
- 179:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
- 180:alpha_time.c  ****         f_g[y] = G(foreImage[y]);
- 181:alpha_time.c  ****     }
- 182:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
- 183:alpha_time.c  ****         f_b[y] = B(foreImage[y]);
- 184:alpha_time.c  ****     }
- 185:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
- 186:alpha_time.c  ****         b_r[y] = R(backImage[y]);
- 187:alpha_time.c  ****         b_g[y] = G(backImage[y]);
- 188:alpha_time.c  ****         b_b[y] = B(backImage[y]);
+  89:alpha_time.c  ****         dstImage[4*index] |=  (0x0000ff00 & (dst_g[0]<<8) );
+  90:alpha_time.c  ****         dstImage[4*index+1] |=  (0x0000ff00 & (dst_g[1]<<8) );
+  91:alpha_time.c  ****         dstImage[4*index+2] |= (0x0000ff00 & (dst_g[2]<<8) );
+  92:alpha_time.c  ****         dstImage[4*index+3] |=  (0x0000ff00 & (dst_g[3]<<8) );
+  93:alpha_time.c  **** 
+  94:alpha_time.c  ****         dstImage[4*index] |=  (0x00ff0000 & (dst_r[0]<<16) );
+  95:alpha_time.c  ****         dstImage[4*index+1] |=  (0x00ff0000 & (dst_r[1]<<16) );
+  96:alpha_time.c  ****         dstImage[4*index+2] |= (0x00ff0000 & (dst_r[2]<<16) );
+  97:alpha_time.c  ****         dstImage[4*index+3] |=  (0x00ff0000 & (dst_r[3]<<16) );
+  98:alpha_time.c  ****     }
+  99:alpha_time.c  **** }
+ 100:alpha_time.c  **** #endif
+ 101:alpha_time.c  **** #if macro == 10
+ 102:alpha_time.c  **** void alphaBlend_c(unsigned char *__restrict fgImage,unsigned char *__restrict bgImage,unsigned char
+ 103:alpha_time.c  **** {
+ 104:alpha_time.c  ****     int index;
+ 105:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
+ 106:alpha_time.c  ****     int temp1,temp2;
+ 107:alpha_time.c  ****     printf("2");
+ 108:alpha_time.c  **** #pragma vector aligned
+ 109:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
+ 110:alpha_time.c  ****         dstImage[index] =  0xff;
+ 111:alpha_time.c  ****         a_fg = fgImage[index];
+ 112:alpha_time.c  ****         temp1 = (fgImage[index+1] * a_fg);
+ 113:alpha_time.c  ****         temp2 = (bgImage[index+1] * (255-a_fg));
+ 114:alpha_time.c  ****         dst_r = ( temp1 + temp2 )>>8;
+ 115:alpha_time.c  ****         dstImage[index+1] =  (0x000000ff & dst_r);
+ 116:alpha_time.c  ****         temp1 = (fgImage[index+2] * a_fg);
+ 117:alpha_time.c  ****         temp2 = (bgImage[index+2] * (255-a_fg));
+ 118:alpha_time.c  ****         dst_g = ( temp1 + temp2 )>>8;
+ 119:alpha_time.c  ****         dstImage[index+2] =  (0x000000ff & dst_g);
+ 120:alpha_time.c  ****         temp1 = (fgImage[index+3] * a_fg);
+ 121:alpha_time.c  ****         temp2 = (bgImage[index+3] * (255-a_fg));
+ 122:alpha_time.c  ****         dst_b = ( temp1 + temp2 )>>8;
+ 123:alpha_time.c  ****         dstImage[index+3] =  (0x000000ff & dst_b);
+ 124:alpha_time.c  ****     }
+ 125:alpha_time.c  **** }
+ 126:alpha_time.c  **** #endif
+ 127:alpha_time.c  **** #if macro == 9
+ 128:alpha_time.c  **** void alphaBlend_c(unsigned char *__restrict fgImage,unsigned char *__restrict bgImage,unsigned char
+ 129:alpha_time.c  **** {
+ 130:alpha_time.c  ****     int index;
+ 131:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
+ 132:alpha_time.c  ****     int temp;
+ 133:alpha_time.c  ****     printf("2");
+ 134:alpha_time.c  **** #pragma vector aligned
+ 135:alpha_time.c  **** 
+ 136:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
+ 137:alpha_time.c  ****         a_fg = fgImage[index];
+ 138:alpha_time.c  ****         dst_r = ((fgImage[index+1] * a_fg) + (bgImage[index+1] * (255-a_fg)))>>8;
+ 139:alpha_time.c  ****         dst_g = ((fgImage[index+2] * a_fg) + (bgImage[index+2] * (255-a_fg)))>>8;
+ 140:alpha_time.c  ****         dst_b = ((fgImage[index+3] * a_fg) + (bgImage[index+3] * (255-a_fg)))>>8;
+ 141:alpha_time.c  ****         dstImage[index] =  0xff;
+ 142:alpha_time.c  ****         dstImage[index+1] =  (0x000000ff & dst_r);
+ 143:alpha_time.c  ****         dstImage[index+2] =  (0x000000ff & dst_g);
+ 144:alpha_time.c  ****         dstImage[index+3] =  (0x000000ff & dst_b);
+ 145:alpha_time.c  ****     }
+ 146:alpha_time.c  **** }
+ 147:alpha_time.c  **** #endif
+ 148:alpha_time.c  **** #if macro == 8
+ 149:alpha_time.c  **** void alphaBlend_c(int *__restrict fgImage, int *__restrict bgImage, int *__restrict dstImage)
+ 150:alpha_time.c  **** {
+ 151:alpha_time.c  ****     int index;
+ 152:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
+ 153:alpha_time.c  ****     printf("2");
+ 154:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
+ 155:alpha_time.c  ****         a_fg = A(fgImage[index]);
+ 156:alpha_time.c  ****         dst_r = ((R(fgImage[index]) * a_fg) + (R(bgImage[index]) * (255-a_fg)))>>8;
+ 157:alpha_time.c  ****         dst_g = ((G(fgImage[index]) * a_fg) + (G(bgImage[index]) * (255-a_fg)))>>8;
+ 158:alpha_time.c  ****         dst_b = ((B(fgImage[index]) * a_fg) + (B(bgImage[index]) * (255-a_fg)))>>8;
+ 159:alpha_time.c  ****         dstImage[index] =  0xff000000 |
+ 160:alpha_time.c  ****             (0x00ff0000 & (dst_r << 16)) |
+ 161:alpha_time.c  ****             (0x0000ff00 & (dst_g << 8)) |
+ 162:alpha_time.c  ****             (0x000000ff & (dst_b));
+ 163:alpha_time.c  ****     }
+ 164:alpha_time.c  **** }
+ 165:alpha_time.c  **** 
+ 166:alpha_time.c  **** #endif
+ 167:alpha_time.c  **** #if macro == 7
+ 168:alpha_time.c  **** void alphaBlend_c(void)
+ 169:alpha_time.c  **** {
+ 170:alpha_time.c  ****     int y;
+ 171:alpha_time.c  ****     short f_a[512*512];
+ 172:alpha_time.c  ****     short f_r[512*512];
+ 173:alpha_time.c  ****     short f_g[512*512];
+ 174:alpha_time.c  ****     short f_b[512*512];
+ 175:alpha_time.c  ****     short b_r[512*512];
+ 176:alpha_time.c  ****     short b_g[512*512];
+ 177:alpha_time.c  ****     short b_b[512*512];
+ 178:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
+ 179:alpha_time.c  ****         f_a[y] = A(foreImage[y]);
+ 180:alpha_time.c  ****     }
+ 181:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
+ 182:alpha_time.c  ****         f_r[y] = R(foreImage[y]);
+ 183:alpha_time.c  ****     }
+ 184:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
+ 185:alpha_time.c  ****         f_g[y] = G(foreImage[y]);
+ 186:alpha_time.c  ****     }
+ 187:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
+ 188:alpha_time.c  ****         f_b[y] = B(foreImage[y]);
  189:alpha_time.c  ****     }
  190:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
- 191:alpha_time.c  ****         newImage[y] = 0xff000000;
- 192:alpha_time.c  ****     }
- 193:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
- 194:alpha_time.c  ****         newImage[y] |= ((f_a[y]*(f_r[y]-b_r[y])+b_r[y]*255)/256)>>16;
- 195:alpha_time.c  ****         newImage[y] |= ((f_a[y]*(f_g[y]-b_g[y])+b_g[y]*255)/256)>>8;
- 196:alpha_time.c  ****         newImage[y] |= ((f_a[y]*(f_b[y]-b_b[y])+b_b[y]*255)/256);
+ 191:alpha_time.c  ****         b_r[y] = R(backImage[y]);
+ 192:alpha_time.c  ****         b_g[y] = G(backImage[y]);
+ 193:alpha_time.c  ****         b_b[y] = B(backImage[y]);
+ 194:alpha_time.c  ****     }
+ 195:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
+ 196:alpha_time.c  ****         newImage[y] = 0xff000000;
  197:alpha_time.c  ****     }
- 198:alpha_time.c  **** /*
- 199:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
- 200:alpha_time.c  ****         dst_r[y] = ((R(foreImage[y]) * a_fg[y]) + (R(backImage[y]) * (255-a_fg[y])))/256;
- 201:alpha_time.c  ****     }
- 202:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
- 203:alpha_time.c  ****         dst_g[y] = ((G(foreImage[y]) * a_fg[y]) + (R(backImage[y]) * (255-a_fg[y])))/256;
- 204:alpha_time.c  ****     }
- 205:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
- 206:alpha_time.c  ****         dst_b[y] = ((B(foreImage[y]) * a_fg[y]) + (R(backImage[y]) * (255-a_fg[y])))/256;
- 207:alpha_time.c  ****     }
- 208:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
- 209:alpha_time.c  ****         dstImage[y] =  0xff000000 |
- 210:alpha_time.c  ****             (0x00ff0000 & (dst_r[y] << 16)) |
- 211:alpha_time.c  ****             (0x0000ff00 & (dst_g[y] << 8)) |
- 212:alpha_time.c  ****             (0x000000ff & (dst_b[y]));
- 213:alpha_time.c  ****     }*/
- 214:alpha_time.c  **** }
- 215:alpha_time.c  **** #endif
- 216:alpha_time.c  **** 
- 217:alpha_time.c  **** #if macro == 6
- 218:alpha_time.c  **** void alphaBlend_c(void)
- 219:alpha_time.c  **** {
- 220:alpha_time.c  ****     int index;
- 221:alpha_time.c  ****     int dst_r,dst_g,dst_b; 
- 222:alpha_time.c  ****     int r_fg,g_fg,b_fg,r_bg,g_bg,b_bg;
- 223:alpha_time.c  ****     int a_fg[512*512];
- 224:alpha_time.c  ****     printf("4");
- 225:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
- 226:alpha_time.c  ****         a_fg[index] = ((unsigned char *)(&foreImage[index]))[0];
- 227:alpha_time.c  ****         r_fg = ((unsigned char *)(&foreImage[index]))[1];
- 228:alpha_time.c  ****         r_bg = ((unsigned char *)(&backImage[index]))[0];
- 229:alpha_time.c  ****         dst_r = ((r_fg * a_fg[index]) + (r_bg * (255-a_fg[index])))/256;
- 230:alpha_time.c  ****         newImage[index] =  0xff000000 | (0x00ff0000 & (dst_r << 16));
- 231:alpha_time.c  ****     }
- 232:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
- 233:alpha_time.c  ****         g_fg = ((unsigned char *)(&foreImage[index]))[2];
- 234:alpha_time.c  ****         g_bg = ((unsigned char *)(&backImage[index]))[1];
- 235:alpha_time.c  ****         dst_g = ((g_fg * a_fg[index]) + (g_bg * (255-a_fg[index])))/256;
- 236:alpha_time.c  ****         newImage[index] |= (0x0000ff00 & (dst_g << 8));
- 237:alpha_time.c  ****     }
- 238:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
- 239:alpha_time.c  ****         b_fg = ((unsigned char *)(&foreImage[index]))[3];
- 240:alpha_time.c  ****         b_bg = ((unsigned char *)(&backImage[index]))[2];
- 241:alpha_time.c  ****         dst_b = ((b_fg * a_fg[index]) + (b_bg * (255-a_fg[index])))/256;
- 242:alpha_time.c  ****         newImage[index] |= (0x000000ff & (dst_b));
- 243:alpha_time.c  ****     }
- 244:alpha_time.c  **** }
- 245:alpha_time.c  **** #endif
- 246:alpha_time.c  **** #if macro == 5
- 247:alpha_time.c  **** void alphaBlend_c(void)
- 248:alpha_time.c  **** {
- 249:alpha_time.c  ****     int index;
- 250:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
- 251:alpha_time.c  ****     int r_fg,g_fg,b_fg,r_bg,g_bg,b_bg;
- 252:alpha_time.c  ****     printf("4");
- 253:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
- 254:alpha_time.c  ****         a_fg = ((unsigned char *)(&foreImage[index]))[0];
- 255:alpha_time.c  ****         r_fg = ((unsigned char *)(&foreImage[index]))[1];
- 256:alpha_time.c  ****         g_fg = ((unsigned char *)(&foreImage[index]))[2];
- 257:alpha_time.c  ****         b_fg = ((unsigned char *)(&foreImage[index]))[3];
- 258:alpha_time.c  ****         r_bg = ((unsigned char *)(&backImage[index]))[0];
- 259:alpha_time.c  ****         g_bg = ((unsigned char *)(&backImage[index]))[1];
- 260:alpha_time.c  ****         b_bg = ((unsigned char *)(&backImage[index]))[2];
- 261:alpha_time.c  ****         dst_r = ((r_fg * a_fg) + (r_bg * (255-a_fg)))/256;
- 262:alpha_time.c  ****         dst_g = ((g_fg * a_fg) + (g_bg * (255-a_fg)))/256;
- 263:alpha_time.c  ****         dst_b = ((b_fg * a_fg) + (b_bg * (255-a_fg)))/256;
- 264:alpha_time.c  ****         newImage[index] =  0xff000000 |
- 265:alpha_time.c  ****             (0x00ff0000 & (dst_r << 16)) |
- 266:alpha_time.c  ****             (0x0000ff00 & (dst_g << 8)) |
- 267:alpha_time.c  ****             (0x000000ff & (dst_b));
- 268:alpha_time.c  ****     }
- 269:alpha_time.c  **** }
- 270:alpha_time.c  **** #endif
- 271:alpha_time.c  **** #if macro == 4
- 272:alpha_time.c  **** void alphaBlend_c(void)
- 273:alpha_time.c  **** {
- 274:alpha_time.c  ****     int index;
- 275:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
- 276:alpha_time.c  ****     int r_fg,g_fg,b_fg,r_bg,g_bg,b_bg;
- 277:alpha_time.c  ****     printf("4");
- 278:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
- 279:alpha_time.c  ****         a_fg = A(foreImage[index]);
- 280:alpha_time.c  ****         r_fg = R(foreImage[index]);
- 281:alpha_time.c  ****         b_fg = G(foreImage[index]);
- 282:alpha_time.c  ****         g_fg = B(foreImage[index]);
- 283:alpha_time.c  ****         r_bg = R(backImage[index]);
- 284:alpha_time.c  ****         b_bg = G(backImage[index]);
- 285:alpha_time.c  ****         g_bg = B(backImage[index]);
- 286:alpha_time.c  ****         dst_r = ((r_fg * a_fg) + (r_bg * (255-a_fg)))/256;
- 287:alpha_time.c  ****         dst_g = ((g_fg * a_fg) + (g_bg * (255-a_fg)))/256;
- 288:alpha_time.c  ****         dst_b = ((b_fg * a_fg) + (b_bg * (255-a_fg)))/256;
- 289:alpha_time.c  ****         newImage[index] =  0xff000000 |
- 290:alpha_time.c  ****             (0x00ff0000 & (dst_r << 16)) |
- 291:alpha_time.c  ****             (0x0000ff00 & (dst_g << 8)) |
- 292:alpha_time.c  ****             (0x000000ff & (dst_b));
- 293:alpha_time.c  ****     }
- 294:alpha_time.c  **** }
- 295:alpha_time.c  **** #endif
- 296:alpha_time.c  **** #if macro == 3
- 297:alpha_time.c  **** void alphaBlend_c(void)
- 298:alpha_time.c  **** {
- 299:alpha_time.c  ****     int index;
- 300:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
- 301:alpha_time.c  ****     printf("3");
- 302:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
- 303:alpha_time.c  ****         a_fg = A(foreImage[index]);
- 304:alpha_time.c  ****         dst_r = ((R(foreImage[index]) * a_fg) + (R(backImage[index]) * (255-a_fg)))/256;
- 305:alpha_time.c  ****         dst_g = ((G(foreImage[index]) * a_fg) + (G(backImage[index]) * (255-a_fg)))/256;
- 306:alpha_time.c  ****         dst_b = ((B(foreImage[index]) * a_fg) + (B(backImage[index]) * (255-a_fg)))/256;
- 307:alpha_time.c  ****         newImage[index] =  0xff000000 |
- 308:alpha_time.c  ****             (0x00ff0000 & (dst_r << 16)) |
- 309:alpha_time.c  ****             (0x0000ff00 & (dst_g << 8)) |
- 310:alpha_time.c  ****             (0x000000ff & (dst_b));
- 311:alpha_time.c  ****     }
- 312:alpha_time.c  **** }
- 313:alpha_time.c  **** #endif
- 314:alpha_time.c  **** #if macro == 2
- 315:alpha_time.c  **** void alphaBlend_c(int *__restrict fgImage, int *__restrict bgImage, int *__restrict dstImage)
- 316:alpha_time.c  **** {
- 317:alpha_time.c  ****     int index;
- 318:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
- 319:alpha_time.c  ****     printf("2");
- 320:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
- 321:alpha_time.c  ****         a_fg = A(fgImage[index]);
- 322:alpha_time.c  ****         dst_r = ((R(fgImage[index]) * a_fg) + (R(bgImage[index]) * (255-a_fg)))/256;
- 323:alpha_time.c  ****         dst_g = ((G(fgImage[index]) * a_fg) + (G(bgImage[index]) * (255-a_fg)))/256;
- 324:alpha_time.c  ****         dst_b = ((B(fgImage[index]) * a_fg) + (B(bgImage[index]) * (255-a_fg)))/256;
- 325:alpha_time.c  ****         dstImage[index] =  0xff000000 |
- 326:alpha_time.c  ****             (0x00ff0000 & (dst_r << 16)) |
- 327:alpha_time.c  ****             (0x0000ff00 & (dst_g << 8)) |
- 328:alpha_time.c  ****             (0x000000ff & (dst_b));
- 329:alpha_time.c  ****     }
- 330:alpha_time.c  **** }
- 331:alpha_time.c  **** #endif
- 332:alpha_time.c  **** #if macro == 1
- 333:alpha_time.c  **** void alphaBlend_c(int *__restrict fgImage, int *__restrict bgImage, int *__restrict dstImage)
- 334:alpha_time.c  **** {
- 335:alpha_time.c  ****     int x, y;
- 336:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
- 337:alpha_time.c  ****     printf("1");
- 338:alpha_time.c  ****     for(y = 0; y < 512; y++){
- 339:alpha_time.c  ****         for(x = 0; x < 512; x++){
- 340:alpha_time.c  ****             a_fg = A(fgImage[(y*512)+x]);
- 341:alpha_time.c  ****             dst_r = ((R(fgImage[(y*512)+x]) * a_fg) + (R(bgImage[(y*512)+x]) * (255-a_fg)))/256;
- 342:alpha_time.c  ****             dst_g = ((G(fgImage[(y*512)+x]) * a_fg) + (G(bgImage[(y*512)+x]) * (255-a_fg)))/256;
- 343:alpha_time.c  ****             dst_b = ((B(fgImage[(y*512)+x]) * a_fg) + (B(bgImage[(y*512)+x]) * (255-a_fg)))/256;
- 344:alpha_time.c  ****             dstImage[(y*512)+x] =  0xff000000 |
- 345:alpha_time.c  ****                 (0x00ff0000 & (dst_r << 16)) |
- 346:alpha_time.c  ****                 (0x0000ff00 & (dst_g << 8)) |
- 347:alpha_time.c  ****                 (0x000000ff & (dst_b));
- 348:alpha_time.c  ****         }
- 349:alpha_time.c  ****     }
- 350:alpha_time.c  **** }
- 351:alpha_time.c  **** #endif
- 352:alpha_time.c  **** #if macro == 0
- 353:alpha_time.c  **** void alphaBlend_c(int *fgImage, int *bgImage, int *dstImage)
- 354:alpha_time.c  **** {
-  31              		.loc 1 354 0
+ 198:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
+ 199:alpha_time.c  ****         newImage[y] |= ((f_a[y]*(f_r[y]-b_r[y])+b_r[y]*255)/256)>>16;
+ 200:alpha_time.c  ****         newImage[y] |= ((f_a[y]*(f_g[y]-b_g[y])+b_g[y]*255)/256)>>8;
+ 201:alpha_time.c  ****         newImage[y] |= ((f_a[y]*(f_b[y]-b_b[y])+b_b[y]*255)/256);
+ 202:alpha_time.c  ****     }
+ 203:alpha_time.c  **** /*
+ 204:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
+ 205:alpha_time.c  ****         dst_r[y] = ((R(foreImage[y]) * a_fg[y]) + (R(backImage[y]) * (255-a_fg[y])))/256;
+ 206:alpha_time.c  ****     }
+ 207:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
+ 208:alpha_time.c  ****         dst_g[y] = ((G(foreImage[y]) * a_fg[y]) + (R(backImage[y]) * (255-a_fg[y])))/256;
+ 209:alpha_time.c  ****     }
+ 210:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
+ 211:alpha_time.c  ****         dst_b[y] = ((B(foreImage[y]) * a_fg[y]) + (R(backImage[y]) * (255-a_fg[y])))/256;
+ 212:alpha_time.c  ****     }
+ 213:alpha_time.c  ****     for(y = 0; y < 512*512; y++){
+ 214:alpha_time.c  ****         dstImage[y] =  0xff000000 |
+ 215:alpha_time.c  ****             (0x00ff0000 & (dst_r[y] << 16)) |
+ 216:alpha_time.c  ****             (0x0000ff00 & (dst_g[y] << 8)) |
+ 217:alpha_time.c  ****             (0x000000ff & (dst_b[y]));
+ 218:alpha_time.c  ****     }*/
+ 219:alpha_time.c  **** }
+ 220:alpha_time.c  **** #endif
+ 221:alpha_time.c  **** 
+ 222:alpha_time.c  **** #if macro == 6
+ 223:alpha_time.c  **** void alphaBlend_c(void)
+ 224:alpha_time.c  **** {
+ 225:alpha_time.c  ****     int index;
+ 226:alpha_time.c  ****     int dst_r,dst_g,dst_b; 
+ 227:alpha_time.c  ****     int r_fg,g_fg,b_fg,r_bg,g_bg,b_bg;
+ 228:alpha_time.c  ****     int a_fg[512*512];
+ 229:alpha_time.c  ****     printf("4");
+ 230:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
+ 231:alpha_time.c  ****         a_fg[index] = ((unsigned char *)(&foreImage[index]))[0];
+ 232:alpha_time.c  ****         r_fg = ((unsigned char *)(&foreImage[index]))[1];
+ 233:alpha_time.c  ****         r_bg = ((unsigned char *)(&backImage[index]))[0];
+ 234:alpha_time.c  ****         dst_r = ((r_fg * a_fg[index]) + (r_bg * (255-a_fg[index])))/256;
+ 235:alpha_time.c  ****         newImage[index] =  0xff000000 | (0x00ff0000 & (dst_r << 16));
+ 236:alpha_time.c  ****     }
+ 237:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
+ 238:alpha_time.c  ****         g_fg = ((unsigned char *)(&foreImage[index]))[2];
+ 239:alpha_time.c  ****         g_bg = ((unsigned char *)(&backImage[index]))[1];
+ 240:alpha_time.c  ****         dst_g = ((g_fg * a_fg[index]) + (g_bg * (255-a_fg[index])))/256;
+ 241:alpha_time.c  ****         newImage[index] |= (0x0000ff00 & (dst_g << 8));
+ 242:alpha_time.c  ****     }
+ 243:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
+ 244:alpha_time.c  ****         b_fg = ((unsigned char *)(&foreImage[index]))[3];
+ 245:alpha_time.c  ****         b_bg = ((unsigned char *)(&backImage[index]))[2];
+ 246:alpha_time.c  ****         dst_b = ((b_fg * a_fg[index]) + (b_bg * (255-a_fg[index])))/256;
+ 247:alpha_time.c  ****         newImage[index] |= (0x000000ff & (dst_b));
+ 248:alpha_time.c  ****     }
+ 249:alpha_time.c  **** }
+ 250:alpha_time.c  **** #endif
+ 251:alpha_time.c  **** #if macro == 5
+ 252:alpha_time.c  **** void alphaBlend_c(void)
+ 253:alpha_time.c  **** {
+ 254:alpha_time.c  ****     int index;
+ 255:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
+ 256:alpha_time.c  ****     int r_fg,g_fg,b_fg,r_bg,g_bg,b_bg;
+ 257:alpha_time.c  ****     printf("4");
+ 258:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
+ 259:alpha_time.c  ****         a_fg = ((unsigned char *)(&foreImage[index]))[0];
+ 260:alpha_time.c  ****         r_fg = ((unsigned char *)(&foreImage[index]))[1];
+ 261:alpha_time.c  ****         g_fg = ((unsigned char *)(&foreImage[index]))[2];
+ 262:alpha_time.c  ****         b_fg = ((unsigned char *)(&foreImage[index]))[3];
+ 263:alpha_time.c  ****         r_bg = ((unsigned char *)(&backImage[index]))[0];
+ 264:alpha_time.c  ****         g_bg = ((unsigned char *)(&backImage[index]))[1];
+ 265:alpha_time.c  ****         b_bg = ((unsigned char *)(&backImage[index]))[2];
+ 266:alpha_time.c  ****         dst_r = ((r_fg * a_fg) + (r_bg * (255-a_fg)))/256;
+ 267:alpha_time.c  ****         dst_g = ((g_fg * a_fg) + (g_bg * (255-a_fg)))/256;
+ 268:alpha_time.c  ****         dst_b = ((b_fg * a_fg) + (b_bg * (255-a_fg)))/256;
+ 269:alpha_time.c  ****         newImage[index] =  0xff000000 |
+ 270:alpha_time.c  ****             (0x00ff0000 & (dst_r << 16)) |
+ 271:alpha_time.c  ****             (0x0000ff00 & (dst_g << 8)) |
+ 272:alpha_time.c  ****             (0x000000ff & (dst_b));
+ 273:alpha_time.c  ****     }
+ 274:alpha_time.c  **** }
+ 275:alpha_time.c  **** #endif
+ 276:alpha_time.c  **** #if macro == 4
+ 277:alpha_time.c  **** void alphaBlend_c(void)
+ 278:alpha_time.c  **** {
+ 279:alpha_time.c  ****     int index;
+ 280:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
+ 281:alpha_time.c  ****     int r_fg,g_fg,b_fg,r_bg,g_bg,b_bg;
+ 282:alpha_time.c  ****     printf("4");
+ 283:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
+ 284:alpha_time.c  ****         a_fg = A(foreImage[index]);
+ 285:alpha_time.c  ****         r_fg = R(foreImage[index]);
+ 286:alpha_time.c  ****         b_fg = G(foreImage[index]);
+ 287:alpha_time.c  ****         g_fg = B(foreImage[index]);
+ 288:alpha_time.c  ****         r_bg = R(backImage[index]);
+ 289:alpha_time.c  ****         b_bg = G(backImage[index]);
+ 290:alpha_time.c  ****         g_bg = B(backImage[index]);
+ 291:alpha_time.c  ****         dst_r = ((r_fg * a_fg) + (r_bg * (255-a_fg)))/256;
+ 292:alpha_time.c  ****         dst_g = ((g_fg * a_fg) + (g_bg * (255-a_fg)))/256;
+ 293:alpha_time.c  ****         dst_b = ((b_fg * a_fg) + (b_bg * (255-a_fg)))/256;
+ 294:alpha_time.c  ****         newImage[index] =  0xff000000 |
+ 295:alpha_time.c  ****             (0x00ff0000 & (dst_r << 16)) |
+ 296:alpha_time.c  ****             (0x0000ff00 & (dst_g << 8)) |
+ 297:alpha_time.c  ****             (0x000000ff & (dst_b));
+ 298:alpha_time.c  ****     }
+ 299:alpha_time.c  **** }
+ 300:alpha_time.c  **** #endif
+ 301:alpha_time.c  **** #if macro == 3
+ 302:alpha_time.c  **** void alphaBlend_c(void)
+ 303:alpha_time.c  **** {
+ 304:alpha_time.c  ****     int index;
+ 305:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
+ 306:alpha_time.c  ****     printf("3");
+ 307:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
+ 308:alpha_time.c  ****         a_fg = A(foreImage[index]);
+ 309:alpha_time.c  ****         dst_r = ((R(foreImage[index]) * a_fg) + (R(backImage[index]) * (255-a_fg)))/256;
+ 310:alpha_time.c  ****         dst_g = ((G(foreImage[index]) * a_fg) + (G(backImage[index]) * (255-a_fg)))/256;
+ 311:alpha_time.c  ****         dst_b = ((B(foreImage[index]) * a_fg) + (B(backImage[index]) * (255-a_fg)))/256;
+ 312:alpha_time.c  ****         newImage[index] =  0xff000000 |
+ 313:alpha_time.c  ****             (0x00ff0000 & (dst_r << 16)) |
+ 314:alpha_time.c  ****             (0x0000ff00 & (dst_g << 8)) |
+ 315:alpha_time.c  ****             (0x000000ff & (dst_b));
+ 316:alpha_time.c  ****     }
+ 317:alpha_time.c  **** }
+ 318:alpha_time.c  **** #endif
+ 319:alpha_time.c  **** #if macro == 2
+ 320:alpha_time.c  **** void alphaBlend_c(int *__restrict fgImage, int *__restrict bgImage, int *__restrict dstImage)
+ 321:alpha_time.c  **** {
+ 322:alpha_time.c  ****     int index;
+ 323:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
+ 324:alpha_time.c  ****     printf("2");
+ 325:alpha_time.c  ****     for(index = 0; index < 512*512; index++){
+ 326:alpha_time.c  ****         a_fg = A(fgImage[index]);
+ 327:alpha_time.c  ****         dst_r = ((R(fgImage[index]) * a_fg) + (R(bgImage[index]) * (255-a_fg)))/256;
+ 328:alpha_time.c  ****         dst_g = ((G(fgImage[index]) * a_fg) + (G(bgImage[index]) * (255-a_fg)))/256;
+ 329:alpha_time.c  ****         dst_b = ((B(fgImage[index]) * a_fg) + (B(bgImage[index]) * (255-a_fg)))/256;
+ 330:alpha_time.c  ****         dstImage[index] =  0xff000000 |
+ 331:alpha_time.c  ****             (0x00ff0000 & (dst_r << 16)) |
+ 332:alpha_time.c  ****             (0x0000ff00 & (dst_g << 8)) |
+ 333:alpha_time.c  ****             (0x000000ff & (dst_b));
+ 334:alpha_time.c  ****     }
+ 335:alpha_time.c  **** }
+ 336:alpha_time.c  **** #endif
+ 337:alpha_time.c  **** #if macro == 1
+ 338:alpha_time.c  **** void alphaBlend_c(int *__restrict fgImage, int *__restrict bgImage, int *__restrict dstImage)
+ 339:alpha_time.c  **** {
+ 340:alpha_time.c  ****     int x, y;
+ 341:alpha_time.c  ****     int a_fg,dst_r,dst_g,dst_b; 
+ 342:alpha_time.c  ****     printf("1");
+ 343:alpha_time.c  ****     for(y = 0; y < 512; y++){
+ 344:alpha_time.c  ****         for(x = 0; x < 512; x++){
+ 345:alpha_time.c  ****             a_fg = A(fgImage[(y*512)+x]);
+ 346:alpha_time.c  ****             dst_r = ((R(fgImage[(y*512)+x]) * a_fg) + (R(bgImage[(y*512)+x]) * (255-a_fg)))/256;
+ 347:alpha_time.c  ****             dst_g = ((G(fgImage[(y*512)+x]) * a_fg) + (G(bgImage[(y*512)+x]) * (255-a_fg)))/256;
+ 348:alpha_time.c  ****             dst_b = ((B(fgImage[(y*512)+x]) * a_fg) + (B(bgImage[(y*512)+x]) * (255-a_fg)))/256;
+ 349:alpha_time.c  ****             dstImage[(y*512)+x] =  0xff000000 |
+ 350:alpha_time.c  ****                 (0x00ff0000 & (dst_r << 16)) |
+ 351:alpha_time.c  ****                 (0x0000ff00 & (dst_g << 8)) |
+ 352:alpha_time.c  ****                 (0x000000ff & (dst_b));
+ 353:alpha_time.c  ****         }
+ 354:alpha_time.c  ****     }
+ 355:alpha_time.c  **** }
+ 356:alpha_time.c  **** #endif
+ 357:alpha_time.c  **** #if macro == 0
+ 358:alpha_time.c  **** void alphaBlend_c(int *fgImage, int *bgImage, int *dstImage)
+ 359:alpha_time.c  **** {
+  31              		.loc 1 359 0
   32              		.cfi_startproc
   33              		@ args = 0, pretend = 0, frame = 40
   34              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -396,26 +401,26 @@
   43 0006 F860     		str	r0, [r7, #12]
   44 0008 B960     		str	r1, [r7, #8]
   45 000a 7A60     		str	r2, [r7, #4]
- 355:alpha_time.c  ****     int x, y;
- 356:alpha_time.c  ****     printf("0");
-  46              		.loc 1 356 0
+ 360:alpha_time.c  ****     int x, y;
+ 361:alpha_time.c  ****     printf("0");
+  46              		.loc 1 361 0
   47 000c 3020     		movs	r0, #48
   48 000e FFF7FEFF 		bl	putchar
- 357:alpha_time.c  ****     for(y = 0; y < 512; y++){
-  49              		.loc 1 357 0
+ 362:alpha_time.c  ****     for(y = 0; y < 512; y++){
+  49              		.loc 1 362 0
   50 0012 0023     		movs	r3, #0
   51 0014 3B62     		str	r3, [r7, #32]
   52 0016 9DE0     		b	.L2
   53              	.L5:
- 358:alpha_time.c  ****         for(x = 0; x < 512; x++){
-  54              		.loc 1 358 0
+ 363:alpha_time.c  ****         for(x = 0; x < 512; x++){
+  54              		.loc 1 363 0
   55 0018 0023     		movs	r3, #0
   56 001a 7B62     		str	r3, [r7, #36]
   57 001c 92E0     		b	.L3
   58              	.L4:
   59              	.LBB2:
- 359:alpha_time.c  ****             int a_fg = A(fgImage[(y*512)+x]);
-  60              		.loc 1 359 0 discriminator 3
+ 364:alpha_time.c  ****             int a_fg = A(fgImage[(y*512)+x]);
+  60              		.loc 1 364 0 discriminator 3
   61 001e 3B6A     		ldr	r3, [r7, #32]
   62 0020 5A02     		lsls	r2, r3, #9
   63 0022 7B6A     		ldr	r3, [r7, #36]
@@ -426,8 +431,8 @@
   68 002c 1B68     		ldr	r3, [r3]
   69 002e 1B0E     		lsrs	r3, r3, #24
   70 0030 FB61     		str	r3, [r7, #28]
- 360:alpha_time.c  ****             int dst_r = ((R(fgImage[(y*512)+x]) * a_fg) + (R(bgImage[(y*512)+x]) * (255-a_fg)))/256
-  71              		.loc 1 360 0 discriminator 3
+ 365:alpha_time.c  ****             int dst_r = ((R(fgImage[(y*512)+x]) * a_fg) + (R(bgImage[(y*512)+x]) * (255-a_fg)))/256
+  71              		.loc 1 365 0 discriminator 3
   72 0032 3B6A     		ldr	r3, [r7, #32]
   73 0034 5A02     		lsls	r2, r3, #9
   74 0036 7B6A     		ldr	r3, [r7, #36]
@@ -461,8 +466,8 @@
  102 007a 1B46     		movge	r3, r3
  103 007c 1B12     		asrs	r3, r3, #8
  104 007e BB61     		str	r3, [r7, #24]
- 361:alpha_time.c  ****             int dst_g = ((G(fgImage[(y*512)+x]) * a_fg) + (G(bgImage[(y*512)+x]) * (255-a_fg)))/256
- 105              		.loc 1 361 0 discriminator 3
+ 366:alpha_time.c  ****             int dst_g = ((G(fgImage[(y*512)+x]) * a_fg) + (G(bgImage[(y*512)+x]) * (255-a_fg)))/256
+ 105              		.loc 1 366 0 discriminator 3
  106 0080 3B6A     		ldr	r3, [r7, #32]
  107 0082 5A02     		lsls	r2, r3, #9
  108 0084 7B6A     		ldr	r3, [r7, #36]
@@ -496,8 +501,8 @@
  136 00c8 1B46     		movge	r3, r3
  137 00ca 1B12     		asrs	r3, r3, #8
  138 00cc 7B61     		str	r3, [r7, #20]
- 362:alpha_time.c  ****             int dst_b = ((B(fgImage[(y*512)+x]) * a_fg) + (B(bgImage[(y*512)+x]) * (255-a_fg)))/256
- 139              		.loc 1 362 0 discriminator 3
+ 367:alpha_time.c  ****             int dst_b = ((B(fgImage[(y*512)+x]) * a_fg) + (B(bgImage[(y*512)+x]) * (255-a_fg)))/256
+ 139              		.loc 1 367 0 discriminator 3
  140 00ce 3B6A     		ldr	r3, [r7, #32]
  141 00d0 5A02     		lsls	r2, r3, #9
  142 00d2 7B6A     		ldr	r3, [r7, #36]
@@ -529,8 +534,8 @@
  168 010e 1B46     		movge	r3, r3
  169 0110 1B12     		asrs	r3, r3, #8
  170 0112 3B61     		str	r3, [r7, #16]
- 363:alpha_time.c  ****             dstImage[(y*512)+x] =  0xff000000 |
- 171              		.loc 1 363 0 discriminator 3
+ 368:alpha_time.c  ****             dstImage[(y*512)+x] =  0xff000000 |
+ 171              		.loc 1 368 0 discriminator 3
  172 0114 3B6A     		ldr	r3, [r7, #32]
  173 0116 5A02     		lsls	r2, r3, #9
  174 0118 7B6A     		ldr	r3, [r7, #36]
@@ -538,55 +543,55 @@
  176 011c 9B00     		lsls	r3, r3, #2
  177 011e 7A68     		ldr	r2, [r7, #4]
  178 0120 1344     		add	r3, r3, r2
- 364:alpha_time.c  ****                 (0x00ff0000 & (dst_r << 16)) |
- 179              		.loc 1 364 0 discriminator 3
+ 369:alpha_time.c  ****                 (0x00ff0000 & (dst_r << 16)) |
+ 179              		.loc 1 369 0 discriminator 3
  180 0122 BA69     		ldr	r2, [r7, #24]
  181 0124 1204     		lsls	r2, r2, #16
  182 0126 02F47F01 		and	r1, r2, #16711680
- 365:alpha_time.c  ****                 (0x0000ff00 & (dst_g << 8)) |
- 183              		.loc 1 365 0 discriminator 3
+ 370:alpha_time.c  ****                 (0x0000ff00 & (dst_g << 8)) |
+ 183              		.loc 1 370 0 discriminator 3
  184 012a 7A69     		ldr	r2, [r7, #20]
  185 012c 1202     		lsls	r2, r2, #8
- 364:alpha_time.c  ****                 (0x00ff0000 & (dst_r << 16)) |
- 186              		.loc 1 364 0 discriminator 3
+ 369:alpha_time.c  ****                 (0x00ff0000 & (dst_r << 16)) |
+ 186              		.loc 1 369 0 discriminator 3
  187 012e 92B2     		uxth	r2, r2
  188 0130 1143     		orrs	r1, r1, r2
- 189              		.loc 1 365 0 discriminator 3
+ 189              		.loc 1 370 0 discriminator 3
  190 0132 3A69     		ldr	r2, [r7, #16]
  191 0134 D2B2     		uxtb	r2, r2
  192 0136 0A43     		orrs	r2, r2, r1
  193 0138 42F07F42 		orr	r2, r2, #-16777216
- 363:alpha_time.c  ****             dstImage[(y*512)+x] =  0xff000000 |
- 194              		.loc 1 363 0 discriminator 3
+ 368:alpha_time.c  ****             dstImage[(y*512)+x] =  0xff000000 |
+ 194              		.loc 1 368 0 discriminator 3
  195 013c 1A60     		str	r2, [r3]
  196              	.LBE2:
- 358:alpha_time.c  ****             int a_fg = A(fgImage[(y*512)+x]);
- 197              		.loc 1 358 0 discriminator 3
+ 363:alpha_time.c  ****             int a_fg = A(fgImage[(y*512)+x]);
+ 197              		.loc 1 363 0 discriminator 3
  198 013e 7B6A     		ldr	r3, [r7, #36]
  199 0140 0133     		adds	r3, r3, #1
  200 0142 7B62     		str	r3, [r7, #36]
  201              	.L3:
- 358:alpha_time.c  ****             int a_fg = A(fgImage[(y*512)+x]);
- 202              		.loc 1 358 0 is_stmt 0 discriminator 1
+ 363:alpha_time.c  ****             int a_fg = A(fgImage[(y*512)+x]);
+ 202              		.loc 1 363 0 is_stmt 0 discriminator 1
  203 0144 7B6A     		ldr	r3, [r7, #36]
  204 0146 B3F5007F 		cmp	r3, #512
  205 014a FFF668AF 		blt	.L4
- 357:alpha_time.c  ****         for(x = 0; x < 512; x++){
- 206              		.loc 1 357 0 is_stmt 1 discriminator 2
+ 362:alpha_time.c  ****         for(x = 0; x < 512; x++){
+ 206              		.loc 1 362 0 is_stmt 1 discriminator 2
  207 014e 3B6A     		ldr	r3, [r7, #32]
  208 0150 0133     		adds	r3, r3, #1
  209 0152 3B62     		str	r3, [r7, #32]
  210              	.L2:
- 357:alpha_time.c  ****         for(x = 0; x < 512; x++){
- 211              		.loc 1 357 0 is_stmt 0 discriminator 1
+ 362:alpha_time.c  ****         for(x = 0; x < 512; x++){
+ 211              		.loc 1 362 0 is_stmt 0 discriminator 1
  212 0154 3B6A     		ldr	r3, [r7, #32]
  213 0156 B3F5007F 		cmp	r3, #512
  214 015a FFF65DAF 		blt	.L5
- 366:alpha_time.c  ****                 (0x000000ff & (dst_b));
- 367:alpha_time.c  ****         }
- 368:alpha_time.c  ****     }
- 369:alpha_time.c  **** }
- 215              		.loc 1 369 0 is_stmt 1
+ 371:alpha_time.c  ****                 (0x000000ff & (dst_b));
+ 372:alpha_time.c  ****         }
+ 373:alpha_time.c  ****     }
+ 374:alpha_time.c  **** }
+ 215              		.loc 1 374 0 is_stmt 1
  216 015e 2837     		adds	r7, r7, #40
  217              		.cfi_def_cfa_offset 8
  218 0160 BD46     		mov	sp, r7
@@ -644,10 +649,10 @@
  251              		.thumb_func
  253              	main:
  254              	.LFB1:
- 370:alpha_time.c  **** #endif
- 371:alpha_time.c  **** int main(int argc, char**argv)
- 372:alpha_time.c  **** {
- 255              		.loc 1 372 0
+ 375:alpha_time.c  **** #endif
+ 376:alpha_time.c  **** int main(int argc, char**argv)
+ 377:alpha_time.c  **** {
+ 255              		.loc 1 377 0
  256              		.cfi_startproc
  257              		@ args = 0, pretend = 0, frame = 40
  258              		@ frame_needed = 1, uses_anonymous_args = 0
@@ -661,17 +666,17 @@
  266              		.cfi_def_cfa_register 7
  267 016a 7860     		str	r0, [r7, #4]
  268 016c 3960     		str	r1, [r7]
- 373:alpha_time.c  ****     FILE *fgFile, *bgFile, *outFile;
- 374:alpha_time.c  ****     int result;
- 375:alpha_time.c  ****     struct timeval oldTv, newTv;
- 376:alpha_time.c  **** 
- 377:alpha_time.c  ****     if(argc != 4){
- 269              		.loc 1 377 0
+ 378:alpha_time.c  ****     FILE *fgFile, *bgFile, *outFile;
+ 379:alpha_time.c  ****     int result;
+ 380:alpha_time.c  ****     struct timeval oldTv, newTv;
+ 381:alpha_time.c  **** 
+ 382:alpha_time.c  ****     if(argc != 4){
+ 269              		.loc 1 382 0
  270 016e 7B68     		ldr	r3, [r7, #4]
  271 0170 042B     		cmp	r3, #4
  272 0172 10D0     		beq	.L7
- 378:alpha_time.c  ****         fprintf(stderr, "Usage:%s foreground background outFile\n",argv[0]);
- 273              		.loc 1 378 0
+ 383:alpha_time.c  ****         fprintf(stderr, "Usage:%s foreground background outFile\n",argv[0]);
+ 273              		.loc 1 383 0
  274 0174 40F20003 		movw	r3, #:lower16:stderr
  275 0178 C0F20003 		movt	r3, #:upper16:stderr
  276 017c 1A68     		ldr	r2, [r3]
@@ -682,14 +687,14 @@
  281 0188 C0F20001 		movt	r1, #:upper16:.LC0
  282 018c 1A46     		mov	r2, r3
  283 018e FFF7FEFF 		bl	fprintf
- 379:alpha_time.c  ****         return 1;
- 284              		.loc 1 379 0
+ 384:alpha_time.c  ****         return 1;
+ 284              		.loc 1 384 0
  285 0192 0123     		movs	r3, #1
  286 0194 C6E0     		b	.L12
  287              	.L7:
- 380:alpha_time.c  ****     }
- 381:alpha_time.c  ****     fgFile = fopen(argv[1], "rb");
- 288              		.loc 1 381 0
+ 385:alpha_time.c  ****     }
+ 386:alpha_time.c  ****     fgFile = fopen(argv[1], "rb");
+ 288              		.loc 1 386 0
  289 0196 3B68     		ldr	r3, [r7]
  290 0198 0433     		adds	r3, r3, #4
  291 019a 1B68     		ldr	r3, [r3]
@@ -698,8 +703,8 @@
  294 01a2 C0F20001 		movt	r1, #:upper16:.LC1
  295 01a6 FFF7FEFF 		bl	fopen
  296 01aa 7862     		str	r0, [r7, #36]
- 382:alpha_time.c  ****     bgFile = fopen(argv[2], "rb");
- 297              		.loc 1 382 0
+ 387:alpha_time.c  ****     bgFile = fopen(argv[2], "rb");
+ 297              		.loc 1 387 0
  298 01ac 3B68     		ldr	r3, [r7]
  299 01ae 0833     		adds	r3, r3, #8
  300 01b0 1B68     		ldr	r3, [r3]
@@ -708,8 +713,8 @@
  303 01b8 C0F20001 		movt	r1, #:upper16:.LC1
  304 01bc FFF7FEFF 		bl	fopen
  305 01c0 3862     		str	r0, [r7, #32]
- 383:alpha_time.c  ****     outFile = fopen(argv[3], "wb");
- 306              		.loc 1 383 0
+ 388:alpha_time.c  ****     outFile = fopen(argv[3], "wb");
+ 306              		.loc 1 388 0
  307 01c2 3B68     		ldr	r3, [r7]
  308 01c4 0C33     		adds	r3, r3, #12
  309 01c6 1B68     		ldr	r3, [r3]
@@ -718,22 +723,22 @@
  312 01ce C0F20001 		movt	r1, #:upper16:.LC2
  313 01d2 FFF7FEFF 		bl	fopen
  314 01d6 F861     		str	r0, [r7, #28]
- 384:alpha_time.c  **** 
- 385:alpha_time.c  ****     if(fgFile && bgFile && outFile){
- 315              		.loc 1 385 0
+ 389:alpha_time.c  **** 
+ 390:alpha_time.c  ****     if(fgFile && bgFile && outFile){
+ 315              		.loc 1 390 0
  316 01d8 7B6A     		ldr	r3, [r7, #36]
  317 01da 002B     		cmp	r3, #0
  318 01dc 00F09480 		beq	.L9
- 319              		.loc 1 385 0 is_stmt 0 discriminator 1
+ 319              		.loc 1 390 0 is_stmt 0 discriminator 1
  320 01e0 3B6A     		ldr	r3, [r7, #32]
  321 01e2 002B     		cmp	r3, #0
  322 01e4 00F09080 		beq	.L9
- 323              		.loc 1 385 0 discriminator 2
+ 323              		.loc 1 390 0 discriminator 2
  324 01e8 FB69     		ldr	r3, [r7, #28]
  325 01ea 002B     		cmp	r3, #0
  326 01ec 00F08C80 		beq	.L9
- 386:alpha_time.c  ****         result = fread(backImage, 512*sizeof(int), 512, bgFile);
- 327              		.loc 1 386 0 is_stmt 1
+ 391:alpha_time.c  ****         result = fread(backImage, 512*sizeof(int), 512, bgFile);
+ 327              		.loc 1 391 0 is_stmt 1
  328 01f0 40F20000 		movw	r0, #:lower16:backImage
  329 01f4 C0F20000 		movt	r0, #:upper16:backImage
  330 01f8 4FF40061 		mov	r1, #2048
@@ -742,13 +747,13 @@
  333 0202 FFF7FEFF 		bl	fread
  334 0206 0346     		mov	r3, r0
  335 0208 BB61     		str	r3, [r7, #24]
- 387:alpha_time.c  ****         if(result != 512){
- 336              		.loc 1 387 0
+ 392:alpha_time.c  ****         if(result != 512){
+ 336              		.loc 1 392 0
  337 020a BB69     		ldr	r3, [r7, #24]
  338 020c B3F5007F 		cmp	r3, #512
  339 0210 0ED0     		beq	.L10
- 388:alpha_time.c  ****             fprintf(stderr, "Error with backImage\n");
- 340              		.loc 1 388 0
+ 393:alpha_time.c  ****             fprintf(stderr, "Error with backImage\n");
+ 340              		.loc 1 393 0
  341 0212 40F20003 		movw	r3, #:lower16:stderr
  342 0216 C0F20003 		movt	r3, #:upper16:stderr
  343 021a 1B68     		ldr	r3, [r3]
@@ -757,14 +762,14 @@
  346 0224 0121     		movs	r1, #1
  347 0226 1522     		movs	r2, #21
  348 0228 FFF7FEFF 		bl	fwrite
- 389:alpha_time.c  ****             return 3;
- 349              		.loc 1 389 0
+ 394:alpha_time.c  ****             return 3;
+ 349              		.loc 1 394 0
  350 022c 0323     		movs	r3, #3
  351 022e 79E0     		b	.L12
  352              	.L10:
- 390:alpha_time.c  ****         }
- 391:alpha_time.c  ****         result = fread(foreImage, 512*sizeof(int), 512, fgFile);
- 353              		.loc 1 391 0
+ 395:alpha_time.c  ****         }
+ 396:alpha_time.c  ****         result = fread(foreImage, 512*sizeof(int), 512, fgFile);
+ 353              		.loc 1 396 0
  354 0230 40F20000 		movw	r0, #:lower16:foreImage
  355 0234 C0F20000 		movt	r0, #:upper16:foreImage
  356 0238 4FF40061 		mov	r1, #2048
@@ -773,13 +778,13 @@
  359 0242 FFF7FEFF 		bl	fread
  360 0246 0346     		mov	r3, r0
  361 0248 BB61     		str	r3, [r7, #24]
- 392:alpha_time.c  ****         if(result != 512){
- 362              		.loc 1 392 0
+ 397:alpha_time.c  ****         if(result != 512){
+ 362              		.loc 1 397 0
  363 024a BB69     		ldr	r3, [r7, #24]
  364 024c B3F5007F 		cmp	r3, #512
  365 0250 0ED0     		beq	.L11
- 393:alpha_time.c  ****             fprintf(stderr, "Error with foreImage\n");
- 366              		.loc 1 393 0
+ 398:alpha_time.c  ****             fprintf(stderr, "Error with foreImage\n");
+ 366              		.loc 1 398 0
  367 0252 40F20003 		movw	r3, #:lower16:stderr
  368 0256 C0F20003 		movt	r3, #:upper16:stderr
  369 025a 1B68     		ldr	r3, [r3]
@@ -788,21 +793,21 @@
  372 0264 0121     		movs	r1, #1
  373 0266 1522     		movs	r2, #21
  374 0268 FFF7FEFF 		bl	fwrite
- 394:alpha_time.c  ****             return 4;
- 375              		.loc 1 394 0
+ 399:alpha_time.c  ****             return 4;
+ 375              		.loc 1 399 0
  376 026c 0423     		movs	r3, #4
  377 026e 59E0     		b	.L12
  378              	.L11:
- 395:alpha_time.c  ****         }
- 396:alpha_time.c  ****         gettimeofday(&oldTv, NULL);
- 379              		.loc 1 396 0
+ 400:alpha_time.c  ****         }
+ 401:alpha_time.c  ****         gettimeofday(&oldTv, NULL);
+ 379              		.loc 1 401 0
  380 0270 07F11003 		add	r3, r7, #16
  381 0274 1846     		mov	r0, r3
  382 0276 0021     		movs	r1, #0
  383 0278 FFF7FEFF 		bl	gettimeofday
- 397:alpha_time.c  **** #if macro == 0
- 398:alpha_time.c  ****         alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
- 384              		.loc 1 398 0
+ 402:alpha_time.c  **** #if macro == 0
+ 403:alpha_time.c  ****         alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
+ 384              		.loc 1 403 0
  385 027c 40F20000 		movw	r0, #:lower16:foreImage
  386 0280 C0F20000 		movt	r0, #:upper16:foreImage
  387 0284 40F20001 		movw	r1, #:lower16:backImage
@@ -810,29 +815,29 @@
  389 028c 40F20002 		movw	r2, #:lower16:newImage
  390 0290 C0F20002 		movt	r2, #:upper16:newImage
  391 0294 FFF7FEFF 		bl	alphaBlend_c
- 399:alpha_time.c  **** #elif macro == 1
- 400:alpha_time.c  ****         alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
- 401:alpha_time.c  **** #elif macro == 2
- 402:alpha_time.c  ****         alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
- 403:alpha_time.c  **** #elif macro == 8
- 404:alpha_time.c  ****         alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
- 405:alpha_time.c  **** #elif macro == 11
- 406:alpha_time.c  ****         alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
- 407:alpha_time.c  **** #elif macro == 9
- 408:alpha_time.c  ****         alphaBlend_c((unsigned char*)&foreImage[0], (unsigned char*)&backImage[0], (unsigned char*)
- 409:alpha_time.c  **** #elif macro == 10
- 410:alpha_time.c  ****         alphaBlend_c((unsigned char*)&foreImage[0], (unsigned char*)&backImage[0], (unsigned char*)
- 411:alpha_time.c  **** #elif macro >= 3
- 412:alpha_time.c  ****         alphaBlend_c();
- 413:alpha_time.c  **** #endif
- 414:alpha_time.c  ****         gettimeofday(&newTv, NULL);
- 392              		.loc 1 414 0
+ 404:alpha_time.c  **** #elif macro == 1
+ 405:alpha_time.c  ****         alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
+ 406:alpha_time.c  **** #elif macro == 2
+ 407:alpha_time.c  ****         alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
+ 408:alpha_time.c  **** #elif macro == 8
+ 409:alpha_time.c  ****         alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
+ 410:alpha_time.c  **** #elif macro == 11
+ 411:alpha_time.c  ****         alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
+ 412:alpha_time.c  **** #elif macro == 9
+ 413:alpha_time.c  ****         alphaBlend_c((unsigned char*)&foreImage[0], (unsigned char*)&backImage[0], (unsigned char*)
+ 414:alpha_time.c  **** #elif macro == 10
+ 415:alpha_time.c  ****         alphaBlend_c((unsigned char*)&foreImage[0], (unsigned char*)&backImage[0], (unsigned char*)
+ 416:alpha_time.c  **** #elif macro >= 3
+ 417:alpha_time.c  ****         alphaBlend_c();
+ 418:alpha_time.c  **** #endif
+ 419:alpha_time.c  ****         gettimeofday(&newTv, NULL);
+ 392              		.loc 1 419 0
  393 0298 07F10803 		add	r3, r7, #8
  394 029c 1846     		mov	r0, r3
  395 029e 0021     		movs	r1, #0
  396 02a0 FFF7FEFF 		bl	gettimeofday
- 415:alpha_time.c  ****         fprintf(stdout, "Routine took %ld microseconds\n", (long)((newTv.tv_sec-oldTv.tv_sec)*10000
- 397              		.loc 1 415 0
+ 420:alpha_time.c  ****         fprintf(stdout, "Routine took %ld microseconds\n", (long)((newTv.tv_sec-oldTv.tv_sec)*10000
+ 397              		.loc 1 420 0
  398 02a4 40F20003 		movw	r3, #:lower16:stdout
  399 02a8 C0F20003 		movt	r3, #:upper16:stdout
  400 02ac 1868     		ldr	r0, [r3]
@@ -856,34 +861,34 @@
  418 02d2 C0F20001 		movt	r1, #:upper16:.LC5
  419 02d6 1A46     		mov	r2, r3
  420 02d8 FFF7FEFF 		bl	fprintf
- 416:alpha_time.c  ****         fwrite(newImage, 512*sizeof(int),512,outFile);
- 421              		.loc 1 416 0
+ 421:alpha_time.c  ****         fwrite(newImage, 512*sizeof(int),512,outFile);
+ 421              		.loc 1 421 0
  422 02dc 40F20000 		movw	r0, #:lower16:newImage
  423 02e0 C0F20000 		movt	r0, #:upper16:newImage
  424 02e4 4FF40061 		mov	r1, #2048
  425 02e8 4FF40072 		mov	r2, #512
  426 02ec FB69     		ldr	r3, [r7, #28]
  427 02ee FFF7FEFF 		bl	fwrite
- 417:alpha_time.c  ****         fclose(fgFile);
- 428              		.loc 1 417 0
+ 422:alpha_time.c  ****         fclose(fgFile);
+ 428              		.loc 1 422 0
  429 02f2 786A     		ldr	r0, [r7, #36]
  430 02f4 FFF7FEFF 		bl	fclose
- 418:alpha_time.c  ****         fclose(bgFile);
- 431              		.loc 1 418 0
+ 423:alpha_time.c  ****         fclose(bgFile);
+ 431              		.loc 1 423 0
  432 02f8 386A     		ldr	r0, [r7, #32]
  433 02fa FFF7FEFF 		bl	fclose
- 419:alpha_time.c  ****         fclose(outFile);
- 434              		.loc 1 419 0
+ 424:alpha_time.c  ****         fclose(outFile);
+ 434              		.loc 1 424 0
  435 02fe F869     		ldr	r0, [r7, #28]
  436 0300 FFF7FEFF 		bl	fclose
- 420:alpha_time.c  ****         return 0;
- 437              		.loc 1 420 0
+ 425:alpha_time.c  ****         return 0;
+ 437              		.loc 1 425 0
  438 0304 0023     		movs	r3, #0
  439 0306 0DE0     		b	.L12
  440              	.L9:
- 421:alpha_time.c  ****     }
- 422:alpha_time.c  ****     fprintf(stderr, "Problem opening a file\n");
- 441              		.loc 1 422 0
+ 426:alpha_time.c  ****     }
+ 427:alpha_time.c  ****     fprintf(stderr, "Problem opening a file\n");
+ 441              		.loc 1 427 0
  442 0308 40F20003 		movw	r3, #:lower16:stderr
  443 030c C0F20003 		movt	r3, #:upper16:stderr
  444 0310 1B68     		ldr	r3, [r3]
@@ -892,12 +897,12 @@
  447 031a 0121     		movs	r1, #1
  448 031c 1722     		movs	r2, #23
  449 031e FFF7FEFF 		bl	fwrite
- 423:alpha_time.c  ****     return 2;
- 450              		.loc 1 423 0
+ 428:alpha_time.c  ****     return 2;
+ 450              		.loc 1 428 0
  451 0322 0223     		movs	r3, #2
  452              	.L12:
- 424:alpha_time.c  **** }
- 453              		.loc 1 424 0 discriminator 1
+ 429:alpha_time.c  **** }
+ 453              		.loc 1 429 0 discriminator 1
  454 0324 1846     		mov	r0, r3
  455 0326 2837     		adds	r7, r7, #40
  456              		.cfi_def_cfa_offset 8
