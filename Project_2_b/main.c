@@ -18,23 +18,23 @@ int newImage[512 * 512];
 
 void alphaBlend_c(int *fgImage, int *bgImage, int *dstImage)
 {
-    /*
-    int x, y;
-    for(y = 0; y < 512; y++){
-        for(x = 0; x < 512; x++){
-            int a_fg = A(fgImage[(y*512)+x]);
-            int dst_r = ((R(fgImage[(y*512)+x]) * a_fg) + (R(bgImage[(y*512)+x]) * (255-a_fg)))/256;
-            int dst_g = ((G(fgImage[(y*512)+x]) * a_fg) + (G(bgImage[(y*512)+x]) * (255-a_fg)))/256;
-            int dst_b = ((B(fgImage[(y*512)+x]) * a_fg) + (B(bgImage[(y*512)+x]) * (255-a_fg)))/256;
-            dstImage[(y*512)+x] =  0xff000000 |
-                (0x00ff0000 & (dst_r << 16)) |
-                (0x0000ff00 & (dst_g << 8)) |
-                (0x000000ff & (dst_b));
-        }
-    }*/
-    int8x16x4_t a;
-    a=vld4q_s8(fgImage);
-
+    uint8x16x4_t fg,bg,ds;
+    uint8x8 aM255;
+    int a;
+    int index=0;
+    for(index =0; index<512;index++)
+    {
+        aM255=vdup_n_u8(255);
+        aM255=vsub_u8(aM255,fg.val[0]);
+        fg=vld4q_u8(&fgImage[index]);
+        bg=vld4q_u8(&bgImage[index]);
+        vmulq_u8(fg.val[0],fg.val[1]);
+        vmulq_u8(fg.val[0],fg.val[2]);
+        vmulq_u8(fg.val[0],fg.val[3]);
+        vmulq_u8(bg.val[0],aM255);
+        vmulq_u8(bg.val[0],aM255);
+        vmulq_u8(bg.val[0],aM255);
+    }
 }
 
 int main(int argc, char**argv)
@@ -64,6 +64,7 @@ int main(int argc, char**argv)
         }
         gettimeofday(&oldTv, NULL);
         alphaBlend_c(&foreImage[0], &backImage[0], &newImage[0]);
+        //alphaBlend_c((int8_t)&foreImage[0],(int8_t) &backImage[0],(int8_t) &newImage[0]);
         gettimeofday(&newTv, NULL);
         fprintf(stdout, "Routine took %d microseconds\n", (int)(newTv.tv_usec - oldTv.tv_usec));
         fwrite(newImage, 512*sizeof(int),512,outFile);
