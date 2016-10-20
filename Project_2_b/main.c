@@ -34,7 +34,13 @@ void alphaBlend_c(const uint8_t *fgImage,const uint8_t *bgImage,uint8_t *dstImag
         aM255=vdup_n_u8(0xff);
         ds.val[alpha]=aM255;
         aM255=vsub_u8(aM255,fg.val[alpha]);
+        //* Combined code into one single line */
+        ds.val[red]=vmovn_u16(vshrq_n_u16(vmlal_u8(vmull_u8(fg.val[alpha],fg.val[red]),aM255,bg.val[red]),8));
+        ds.val[green]=vmovn_u16(vshrq_n_u16(vmlal_u8(vmull_u8(fg.val[alpha],fg.val[green]),aM255,bg.val[green]),8));
+        ds.val[blue]=vmovn_u16(vshrq_n_u16(vmlal_u8(vmull_u8(fg.val[blue],fg.val[blue]),aM255,bg.val[blue]),8));
 
+        /* above code when split into multiple instruction */
+/*
         temp=vmull_u8(fg.val[alpha],fg.val[red]);
         temp=vmlal_u8(temp,aM255,bg.val[red]);
         temp=vshrq_n_u16(temp,8);
@@ -49,7 +55,7 @@ void alphaBlend_c(const uint8_t *fgImage,const uint8_t *bgImage,uint8_t *dstImag
         temp=vmlal_u8(temp,aM255,bg.val[blue]);
         temp=vshrq_n_u16(temp,8);
         ds.val[blue]=vmovn_u16(temp);
-
+*/
         vst4_u8(&dstImage[index],ds);
     }
 }
