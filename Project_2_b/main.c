@@ -18,22 +18,35 @@ int newImage[512 * 512];
 
 void alphaBlend_c(int *fgImage, int *bgImage, int *dstImage)
 {
-    uint8x16x4_t fg,bg,ds;
-    uint8x8 aM255;
+    uint8x8x4_t fg,bg,ds;
+    uint8x8_t aM255;
+    uint16x8_t temp;
     int a;
     int index=0;
-    for(index =0; index<512;index++)
+    for(index =0; index<512*512/8;index++)
     {
+        fg=vld4_u8(&fgImage[index*8]);
+        bg=vld4_u8(&bgImage[index*8]);
         aM255=vdup_n_u8(255);
+        ds.val[0]=aM255;
         aM255=vsub_u8(aM255,fg.val[0]);
-        fg=vld4q_u8(&fgImage[index]);
-        bg=vld4q_u8(&bgImage[index]);
-        vmulq_u8(fg.val[0],fg.val[1]);
-        vmulq_u8(fg.val[0],fg.val[2]);
-        vmulq_u8(fg.val[0],fg.val[3]);
-        vmulq_u8(bg.val[0],aM255);
-        vmulq_u8(bg.val[0],aM255);
-        vmulq_u8(bg.val[0],aM255);
+
+        temp=vmull_u8(fg.val[0],fg.val[1]);
+        temp=vmlal_u8(temp,aM255,bg.val[1]);
+        temp=vshrq_n_u16(temp,8);
+        ds.val[1]=vmovn_u16(temp);
+
+        temp=vmull_u8(fg.val[0],fg.val[2]);
+        temp=vmlal_u8(temp,aM255,bg.val[2]);
+        temp=vshrq_n_u16(temp,8);
+        ds.val[2]=vmovn_u16(temp);
+
+        temp=vmull_u8(fg.val[0],fg.val[3]);
+        temp=vmlal_u8(temp,aM255,bg.val[3]);
+        temp=vshrq_n_u16(temp,8);
+        ds.val[3]=vmovn_u16(temp);
+
+        vst4_u8(&dstImage[index*8],ds);
     }
 }
 
