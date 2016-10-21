@@ -27,12 +27,12 @@ void alphaBlend_c(const uint8_t *fgImage,const uint8_t *bgImage,uint8_t *dstImag
     uint8x8_t aM255;
     uint16x8_t temp;
     int index=0;
-    for(index =0; index<512*512*4;index=index+32)
+    for(index =0; index<512*512*4/32;index++)
     {
-        fg=vld4_u8(&fgImage[index]);
-        bg=vld4_u8(&bgImage[index]);
+        fg=vld4_u8(&fgImage[index*32]);
+        bg=vld4_u8(&bgImage[index*32]);
         aM255=vdup_n_u8(0xff);
-        ds.val[alpha]=aM255;
+        ds.val[alpha]=vdup_n_u8(0xff);
         aM255=vsub_u8(aM255,fg.val[alpha]);
         //* Combined code into one single line */
         ds.val[red]=vmovn_u16(vshrq_n_u16(vmlal_u8(vmull_u8(fg.val[alpha],fg.val[red]),aM255,bg.val[red]),8));
@@ -56,7 +56,7 @@ void alphaBlend_c(const uint8_t *fgImage,const uint8_t *bgImage,uint8_t *dstImag
         temp=vshrq_n_u16(temp,8);
         ds.val[blue]=vmovn_u16(temp);
 */
-        vst4_u8(&dstImage[index],ds);
+        vst4_u8(&dstImage[index*32],ds);
     }
 }
 
@@ -89,7 +89,7 @@ int main(int argc, char**argv)
         alphaBlend_c((uint8_t*)&foreImage[0], (uint8_t*)&backImage[0],(uint8_t*) &newImage[0]);
         //alphaBlend_c((int8_t)&foreImage[0],(int8_t) &backImage[0],(int8_t) &newImage[0]);
         gettimeofday(&newTv, NULL);
-        fprintf(stdout, "Routine took %d microseconds\n", (int)(newTv.tv_usec - oldTv.tv_usec));
+        fprintf(stdout, "Routine took %ld microseconds\n", (long int)((newTv.tv_sec-oldTv.tv_sec)*1000000+(newTv.tv_usec - oldTv.tv_usec)));
         fwrite(newImage, 512*sizeof(int),512,outFile);
         fclose(fgFile);
         fclose(bgFile);
