@@ -3,11 +3,11 @@ NumTest=$1
 min1=999999
 
 minvalues1=()
-make clean alpha.out
+make clean all
 min1=999999
 for ((i=0; i<NumTest; i++));
 do
-    output=`./alpha.out fore.rgba back.rgba out.rgba`
+    output=`./alpha_time fore.rgba back.rgba out.rgba`
     count=$((count+1))
     set -- $output
     printf "%d \t" "$3"
